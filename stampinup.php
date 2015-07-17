@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Stampinup
- * @version 0.1
+ * @version 0.2
  */
 /*
 Plugin Name: Stampin Up easy
 Plugin URI: http://www.hosl.de/
 Description: This Plugin adds a shortcode for easy Stampin Up Product presentation and adds your dbwsdemoid to every stampinup shop link to you place in the content.
 Author: Andreas H.
-Version: 0.1
+Version: 0.2
 Author URI: http://hosl.de/
 */
 
@@ -138,7 +138,8 @@ function stampinup_demoid_content_filter($content) {
 //    if( is_singular() && is_main_query() ) {
     if( is_main_query() ) {
         $demoid = get_option( 'stampinup-demoid' );
-        $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=0-9]+)/i', '$1&dbwsdemoid='.$demoid, $content) ;
+        $new_content = preg_replace( '/(|\&amp\;)dbwsdemoid=[0-9]+/i', '', $content );
+        $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid, $new_content) ;
         $content = $new_content;   
     }   
     return $content;
