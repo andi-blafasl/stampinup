@@ -138,7 +138,6 @@ function stampinup_demoid_content_filter($content) {
 //    if( is_singular() && is_main_query() ) {
     if( is_main_query() ) {
         $demoid = get_option( 'stampinup-demoid' );
-        $new_content = preg_replace
         $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=0-9]+)/i', '$1&dbwsdemoid='.$demoid, $content) ;
         $content = $new_content;   
     }   
