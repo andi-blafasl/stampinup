@@ -1,0 +1,42 @@
+/*
+  Description:  Travely Child Theme
+  Author:       Andreas H.
+  Author URI:   http://hosl.de
+*/
+
+.stampused {
+}
+
+.stampused-wrap {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.stampused-item {
+    padding: 4px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 2px 0;
+}
+
+.stampused-item-small img {
+    width: 135px;
+}
+
+.stampused-item-big img {
+    width: 285px;
+}
+
+.stampprod {
+    text-decoration:none;
+    position:relative;
+}
+.stampprod span {
+    display:none;
+}
+.stampprod:hover span {
+    display:block;
+    position:fixed;
+    overflow:hidden;
+}
