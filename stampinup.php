@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Stampinup
- * @version 0.2
+ * @version 0.3
  */
 /*
 Plugin Name: Stampin Up easy
 Plugin URI: http://www.hosl.de/
 Description: This Plugin adds a shortcode for easy Stampin Up Product presentation and adds your dbwsdemoid to every stampinup shop link to you place in the content.
 Author: Andreas H.
-Version: 0.2
+Version: 0.3
 Author URI: http://hosl.de/
 */
 
@@ -54,6 +54,12 @@ function stempeltier_stampused_sc( $atts , $content = null ) {
 
     // DemoID from DB
     $demoid = get_option( 'stampinup-demoid' );
+	
+	// HOSTCODE from DB
+    $hostcode = get_option( 'stampinup-hostcode' );
+	if ( $hostcode != '' ) {
+		$hostcode = "&hostcode=$hostcode";
+	}
 
     // Code
     $return = "<div class=\"$style $style-wrap\">\n";
@@ -62,9 +68,12 @@ function stempeltier_stampused_sc( $atts , $content = null ) {
         //$return.= "<!-- $product -->\n";
         if ( preg_match( "/^[0-9]{6}$/", $product) ) {
             $return.= "  <div class=\"$style-item $style-item-$size\">\n";
-            $return.= "    <a href=\"http://www2.stampinup.com/ECWeb/ProductDetails.aspx?productID=$product&dbwsdemoid=$demoid\" 
+            $return.= "    <a href=\"https://www.stampinup.de/search/$product?dbwsdemoid=$demoid$hostcode\" 
                 alt=\"Stampin Up Product $product\" title=\"Stampin Up Online Shop Product $product\" target=\"_blank\">
                 <img src=\"//www2.stampinup.com/images/EC/$product$imgsize.jpg\" alt=\"Stampin Up Product $product\"></a>";
+            /*$return.= "    <a href=\"http://www2.stampinup.com/ECWeb/ProductDetails.aspx?productID=$product&dbwsdemoid=$demoid\" 
+                alt=\"Stampin Up Product $product\" title=\"Stampin Up Online Shop Product $product\" target=\"_blank\">
+                <img src=\"//www2.stampinup.com/images/EC/$product$imgsize.jpg\" alt=\"Stampin Up Product $product\"></a>";*/
             $return.= "  </div>\n";
         }
     }
@@ -110,10 +119,17 @@ function stempeltier_stampprod_sc( $atts , $content = null ) {
     // DemoID from DB
     $demoid = get_option( 'stampinup-demoid' );
 
+	
+	// HOSTCODE from DB
+    $hostcode = get_option( 'stampinup-hostcode' );
+	if ( $hostcode != '' ) {
+		$hostcode = "&hostcode=$hostcode";
+	}
+
     // Code
     if ( $id != 0 ) {
         wp_enqueue_script( 'stempprod-js', get_stylesheet_directory_uri() . '/js/stampsc.js', array(), '0.0.1', true);
-        $return = "<a href=\"http://www2.stampinup.com/ECWeb/ProductDetails.aspx?productID=$product&dbwsdemoid=$demoid\" 
+        $return = "<a href=\"https://www.stampinup.de/search/$product?dbwsdemoid=$demoid$hostcode\" 
                     alt=\"Stampin Up Product $product\" title=\"Stampin Up Online Shop Product $product\" target=\"_blank\" class=\"$style\">";
             if ( $hover ) {
                 $return.= "  <span id=\"stampprod-span\">";
@@ -137,9 +153,18 @@ add_shortcode( 'stampprod', 'stempeltier_stampprod_sc' );
 function stampinup_demoid_content_filter($content) {
 //    if( is_singular() && is_main_query() ) {
     if( is_main_query() ) {
+		// DemoID from DB
         $demoid = get_option( 'stampinup-demoid' );
+			
+		// HOSTCODE from DB
+		$hostcode = get_option( 'stampinup-hostcode' );
+		if ( $hostcode != '' ) {
+			$hostcode = "&hostcode=$hostcode";
+		}
+
         $new_content = preg_replace( '/(|\&amp\;)dbwsdemoid=[0-9]+/i', '', $content );
         $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid, $new_content) ;
+		$new_content = preg_replace( '/(href=.https:\/\/www\.stampinup\.(com|de)\/search\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid.$hostcode, $new_content) ;
         $content = $new_content;   
     }   
     return $content;
@@ -166,6 +191,7 @@ function stampinup_menu() {
 function register_stampinup_settings() {
     //register our settings
     register_setting( 'stampinup-settings-group', 'stampinup-demoid' );
+    register_setting( 'stampinup-settings-group', 'stampinup-hostcode' );
 }
 
 /**
@@ -187,6 +213,10 @@ function stampinup_options() {
         <tr valign="top">
         <th scope="row">Your Stampin Up Demo ID</th>
         <td><input type="text" name="stampinup-demoid" value="<?php echo esc_attr( get_option('stampinup-demoid') ); ?>" /></td>
+        </tr>
+        <tr valign="top">
+        <th scope="row">Your Stampin Up HOSTCODE</th>
+        <td><input type="text" name="stampinup-hostcode" value="<?php echo esc_attr( get_option('stampinup-hostcode') ); ?>" /></td>
         </tr>
          
     </table>
