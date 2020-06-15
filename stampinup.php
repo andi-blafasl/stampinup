@@ -164,7 +164,7 @@ function stampinup_demoid_content_filter($content) {
 
         $new_content = preg_replace( '/(|\&amp\;)dbwsdemoid=[0-9]+/i', '', $content );
         $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid, $new_content) ;
-		$new_content = preg_replace( '/(href=.https:\/\/www\.stampinup\.(com|de)\/search\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid.$hostcode, $new_content) ;
+		$new_content = preg_replace( '/(href=.https:\/\/www\.stampinup\.(com|de)\/search\/[a-z.?&=;0-9]+)/i', '$1?&dbwsdemoid='.$demoid.$hostcode, $new_content) ;
         $content = $new_content;   
     }   
     return $content;
