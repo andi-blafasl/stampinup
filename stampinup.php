@@ -68,7 +68,7 @@ function stempeltier_stampused_sc( $atts , $content = null ) {
         //$return.= "<!-- $product -->\n";
         if ( preg_match( "/^[0-9]{6}$/", $product) ) {
             $return.= "  <div class=\"$style-item $style-item-$size\">\n";
-            $return.= "    <a href=\"https://www.stampinup.de/search/$product?dbwsdemoid=$demoid$hostcode\" 
+            $return.= "    <a href=\"https://www.stampinup.de/products/$product?dbwsdemoid=$demoid$hostcode\" 
                 alt=\"Stampin Up Product $product\" title=\"Stampin Up Online Shop Product $product\" target=\"_blank\">
                 <img src=\"//www2.stampinup.com/images/EC/$product$imgsize.jpg\" alt=\"Stampin Up Product $product\"></a>";
             /*$return.= "    <a href=\"http://www2.stampinup.com/ECWeb/ProductDetails.aspx?productID=$product&dbwsdemoid=$demoid\" 
@@ -129,7 +129,7 @@ function stempeltier_stampprod_sc( $atts , $content = null ) {
     // Code
     if ( $id != 0 ) {
         wp_enqueue_script( 'stempprod-js', get_stylesheet_directory_uri() . '/js/stampsc.js', array(), '0.0.1', true);
-        $return = "<a href=\"https://www.stampinup.de/search/$product?dbwsdemoid=$demoid$hostcode\" 
+        $return = "<a href=\"https://www.stampinup.de/products/$product?dbwsdemoid=$demoid$hostcode\" 
                     alt=\"Stampin Up Product $product\" title=\"Stampin Up Online Shop Product $product\" target=\"_blank\" class=\"$style\">";
             if ( $hover ) {
                 $return.= "  <span id=\"stampprod-span\">";
@@ -165,6 +165,7 @@ function stampinup_demoid_content_filter($content) {
         $new_content = preg_replace( '/(|\&amp\;)dbwsdemoid=[0-9]+/i', '', $content );
         $new_content = preg_replace( '/(href=.http:\/\/www2\.stampinup\.com\/ECWeb\/[a-z.?&=;0-9]+)/i', '$1&dbwsdemoid='.$demoid, $new_content) ;
 		$new_content = preg_replace( '/(href=.https:\/\/www\.stampinup\.(com|de)\/search\/[a-z.?&=;0-9]+)/i', '$1?&dbwsdemoid='.$demoid.$hostcode, $new_content) ;
+		$new_content = preg_replace( '/(href=.https:\/\/www\.stampinup\.(com|de)\/products\/[a-z.?&=;0-9]+)/i', '$1?&dbwsdemoid='.$demoid.$hostcode, $new_content) ;
         $content = $new_content;   
     }   
     return $content;
